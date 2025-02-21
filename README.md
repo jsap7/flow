@@ -1,4 +1,4 @@
-# Flow - Terminal Pattern Animation
+# Flow - Terminal Screensaver
 
 A mesmerizing flowing pattern animation that creates beautiful, dynamic visuals in your terminal.
 
@@ -25,7 +25,7 @@ Red and blue density-based blend:
 ```bash
 flow red --blend blue --blend-style value
 ```
-![Color Blend](gifs/blue_red.gif)
+![Color Blend](gifs/bluered.gif)
 
 ### Matrix with Extra Waves
 Complex Matrix-style pattern with maximum wave complexity:
