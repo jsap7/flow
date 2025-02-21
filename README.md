@@ -10,6 +10,7 @@ A mesmerizing flowing pattern animation that creates beautiful, dynamic visuals 
 - Brightness controls
 - Responsive to terminal size
 - Smooth animations
+- Customizable wave patterns
 
 ## Installation
 
@@ -68,6 +69,26 @@ Example:
 flow cyan --blend blue                  # Default character-based blend
 flow purple --blend yellow --blend-style waves   # Diagonal wave pattern
 flow red --blend blue --blend-style value       # Density-based coloring
+```
+
+### Wave Patterns
+
+Add complexity to the animation with additional wave patterns:
+```bash
+flow cyan --waves 1    # Add one extra wave
+flow blue --waves 2    # Add two extra waves
+flow purple --waves 3  # Maximum complexity with all waves
+```
+
+Each wave adds its own unique movement:
+- Wave 1: Diagonal crossing pattern for dynamic movement
+- Wave 2: Horizontal drift for flow variation
+- Wave 3: Vertical sweep for extra complexity
+
+Combine with other options:
+```bash
+flow cyan --waves 2 --blend blue    # Complex pattern with color blending
+flow matrix --waves 3 -b           # Maximum complexity with bright mode
 ```
 
 ## Controls

@@ -78,6 +78,7 @@ const COLORS = {
 
 // Animation state
 let time = 0;
+let extraWaves = 0;  // Number of additional sine waves to add
 
 // Current display settings
 let currentColor = 'cyan';    // Default color
@@ -122,6 +123,13 @@ const BLEND_STYLES = {
     }
 };
 
+// Extra wave patterns
+const EXTRA_WAVES = [
+    (x, y, t) => Math.sin((x - y) * 0.06 + t * 0.9) * 0.2,  // Diagonal crossing
+    (x, y, t) => Math.sin(y * 0.07 - t * 0.7) * 0.15,       // Horizontal drift
+    (x, y, t) => Math.sin(x * 0.09 + t * 1.1) * 0.25        // Vertical sweep
+];
+
 function getColorForChar(char, value, x, y, t) {
     const blendFn = BLEND_STYLES[blendStyle] || BLEND_STYLES.chars;
     return blendFn(char, value, x, y, t);
@@ -141,12 +149,18 @@ function getColorForChar(char, value, x, y, t) {
 function getFlowPattern(x, y, t) {
     const scale = 0.08;
     
-    // Combine multiple sine waves for a more complex flow
-    const value = Math.sin((x + y) * scale + t) * 0.5 + 
-                 Math.sin(x * scale - t * 1.2) * 0.3 +
-                 Math.sin(y * scale + t * 0.8) * 0.2;
+    // Start with the original beautiful pattern
+    let value = Math.sin((x + y) * scale + t) * 0.5 + 
+                Math.sin(x * scale - t * 1.2) * 0.3 +
+                Math.sin(y * scale + t * 0.8) * 0.2;
     
-    return (value + 1) / 2; // Normalize to 0-1
+    // Add requested extra waves
+    for (let i = 0; i < extraWaves && i < EXTRA_WAVES.length; i++) {
+        value += EXTRA_WAVES[i](x, y, t);
+    }
+    
+    // Normalize to 0-1, ensuring we stay in range even with extra waves
+    return Math.min(1, Math.max(0, (value + 1.5) / 3));
 }
 
 function render() {
@@ -205,13 +219,15 @@ function showUsage() {
     console.log('    chars   - Character-based blending (default)');
     console.log('    bands   - Vertical flowing bands');
     console.log('    waves   - Diagonal waves');
-    console.log('    value   - Density-based blending\n');
+    console.log('    value   - Density-based blending');
+    console.log('  --waves [1-3]             Add extra wave patterns\n');
     console.log('Examples:');
     console.log('  flow              # Default cyan flow');
     console.log('  flow matrix -b    # Dense bright green Matrix-style');
     console.log('  flow cyan --blend blue                  # Character-based cyan/blue blend');
-    console.log('  flow purple --blend yellow --blend-style bands   # Purple/yellow bands');
-    console.log('  flow red --blend blue --blend-style value       # Density-based red/blue\n');
+    console.log('  flow purple --blend yellow --blend-style waves   # Purple/yellow waves');
+    console.log('  flow red --waves 2         # Red flow with two extra wave patterns');
+    console.log('  flow blue --waves 3 -b     # Bright blue with maximum wave complexity\n');
     console.log('Controls:');
     console.log('  Ctrl+C    Exit the animation\n');
     console.log('Starting in 2 seconds...');
@@ -233,15 +249,22 @@ args.forEach((arg, index) => {
                 brightness = 'dim';
                 break;
             case '--blend':
-                // Check if next argument exists and is a valid color
                 if (index + 1 < args.length && COLORS[args[index + 1].toLowerCase()]) {
                     secondColor = args[index + 1].toLowerCase();
                 }
                 break;
             case '--blend-style':
-                // Check if next argument is a valid blend style
                 if (index + 1 < args.length && BLEND_STYLES[args[index + 1].toLowerCase()]) {
                     blendStyle = args[index + 1].toLowerCase();
+                }
+                break;
+            case '--waves':
+                // Add 1-3 extra waves based on the next argument
+                if (index + 1 < args.length) {
+                    const num = parseInt(args[index + 1]);
+                    if (!isNaN(num) && num > 0 && num <= 3) {
+                        extraWaves = num;
+                    }
                 }
                 break;
         }
