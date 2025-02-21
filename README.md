@@ -5,11 +5,11 @@ A mesmerizing flowing pattern animation that creates beautiful, dynamic visuals 
 ## Features
 
 - Dynamic flowing patterns
-- Smooth animations
+- Multiple color options
+- Different blend styles and effects
+- Brightness controls
 - Responsive to terminal size
-- Multiple color options with brightness controls
-- Lightweight and efficient
-- Easy to install and run
+- Smooth animations
 
 ## Installation
 
@@ -55,13 +55,19 @@ flow purple -b    # Bright purple with dense pattern
 flow yellow -d    # Dim yellow with light pattern
 ```
 
-### Combined Examples
+### Blend Styles
 
+When using two colors, choose how they blend:
+- `chars` - Character-based blending (default)
+- `waves` - Flowing diagonal waves
+- `bands` - Animated flowing bands
+- `value` - Density-based color selection
+
+Example:
 ```bash
-flow matrix -b    # Dense bright green Matrix-style
-flow blue -d      # Subtle flowing blue
-flow purple       # Standard purple streams
-flow yellow -b    # Bright flowing yellow
+flow cyan --blend blue                  # Default character-based blend
+flow purple --blend yellow --blend-style waves   # Diagonal wave pattern
+flow red --blend blue --blend-style value       # Density-based coloring
 ```
 
 ## Controls

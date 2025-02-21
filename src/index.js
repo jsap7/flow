@@ -82,6 +82,50 @@ let time = 0;
 // Current display settings
 let currentColor = 'cyan';    // Default color
 let brightness = 'normal';    // Default brightness
+let secondColor = null;       // Optional second color for blending
+let blendStyle = 'chars';     // Default blend style
+
+// Blend style functions
+const BLEND_STYLES = {
+    // Original character-based blending
+    chars: (char, value, x, y, t) => {
+        if (!secondColor) return COLORS[currentColor][brightness];
+        if ('.,:;'.includes(char)) {
+            return COLORS[currentColor][brightness];
+        } else if ('=#@'.includes(char)) {
+            return COLORS[secondColor][brightness];
+        } else {
+            return COLORS[currentColor][brightness];
+        }
+    },
+    
+    // Flowing bands that follow the pattern
+    bands: (char, value, x, y, t) => {
+        if (!secondColor) return COLORS[currentColor][brightness];
+        // Use the flow pattern to influence the bands
+        const flowOffset = Math.sin((x + y) * 0.05 + t) * 0.3;
+        const bandValue = Math.sin((x * 0.1) + flowOffset + t * 0.5) * 0.5 + 0.5;
+        return bandValue > 0.5 ? COLORS[currentColor][brightness] : COLORS[secondColor][brightness];
+    },
+    
+    // Diagonal waves
+    waves: (char, value, x, y, t) => {
+        if (!secondColor) return COLORS[currentColor][brightness];
+        const waveValue = Math.sin((x + y) * 0.1 + t) * 0.5 + 0.5;
+        return waveValue > 0.5 ? COLORS[currentColor][brightness] : COLORS[secondColor][brightness];
+    },
+    
+    // Value-based (denser patterns get second color)
+    value: (char, value, x, y, t) => {
+        if (!secondColor) return COLORS[currentColor][brightness];
+        return value > 0.5 ? COLORS[secondColor][brightness] : COLORS[currentColor][brightness];
+    }
+};
+
+function getColorForChar(char, value, x, y, t) {
+    const blendFn = BLEND_STYLES[blendStyle] || BLEND_STYLES.chars;
+    return blendFn(char, value, x, y, t);
+}
 
 // ============================================================================
 // Pattern Generation
@@ -105,30 +149,23 @@ function getFlowPattern(x, y, t) {
     return (value + 1) / 2; // Normalize to 0-1
 }
 
-// ============================================================================
-// Rendering
-// ============================================================================
-
-/**
- * Renders a single frame of the animation
- */
 function render() {
-    let output = '';
     const currentChars = CHARS[brightness];
     
-    // Generate the pattern
+    // Generate and render the pattern line by line
+    term.moveTo(1, 1);
     for (let y = 0; y < height - 1; y++) {
         for (let x = 0; x < width; x++) {
             const value = getFlowPattern(x, y, time);
             const charIndex = Math.floor(value * (currentChars.length - 1));
-            output += currentChars[charIndex];
+            const char = currentChars[charIndex];
+            
+            // Get color based on the current blend style
+            const colorFn = getColorForChar(char, value, x, y, time);
+            colorFn(char);
         }
-        output += '\n';
+        term.nextLine();
     }
-    
-    // Write entire frame at once for smooth display
-    term.moveTo(1, 1);
-    COLORS[currentColor][brightness](output);
 }
 
 /**
@@ -161,14 +198,20 @@ function showUsage() {
     console.log('  red      - Flowing red patterns');
     console.log('  yellow   - Warm yellow streams\n');
     console.log('Options:');
-    console.log('  -b, --bright    Brighter color with denser pattern');
-    console.log('  -d, --dim       Standard color with lighter pattern\n');
+    console.log('  -b, --bright              Brighter color with denser pattern');
+    console.log('  -d, --dim                 Standard color with lighter pattern');
+    console.log('  --blend [color]           Blend with a second color');
+    console.log('  --blend-style [style]     Choose blend style:');
+    console.log('    chars   - Character-based blending (default)');
+    console.log('    bands   - Vertical flowing bands');
+    console.log('    waves   - Diagonal waves');
+    console.log('    value   - Density-based blending\n');
     console.log('Examples:');
     console.log('  flow              # Default cyan flow');
     console.log('  flow matrix -b    # Dense bright green Matrix-style');
-    console.log('  flow blue -d      # Subtle flowing blue');
-    console.log('  flow purple       # Standard purple streams');
-    console.log('  flow yellow -b    # Bright flowing yellow\n');
+    console.log('  flow cyan --blend blue                  # Character-based cyan/blue blend');
+    console.log('  flow purple --blend yellow --blend-style bands   # Purple/yellow bands');
+    console.log('  flow red --blend blue --blend-style value       # Density-based red/blue\n');
     console.log('Controls:');
     console.log('  Ctrl+C    Exit the animation\n');
     console.log('Starting in 2 seconds...');
@@ -178,7 +221,7 @@ function showUsage() {
 const args = process.argv.slice(2);
 
 // Process arguments
-args.forEach((arg) => {
+args.forEach((arg, index) => {
     if (arg.startsWith('-')) {
         switch (arg.toLowerCase()) {
             case '-b':
@@ -189,8 +232,20 @@ args.forEach((arg) => {
             case '--dim':
                 brightness = 'dim';
                 break;
+            case '--blend':
+                // Check if next argument exists and is a valid color
+                if (index + 1 < args.length && COLORS[args[index + 1].toLowerCase()]) {
+                    secondColor = args[index + 1].toLowerCase();
+                }
+                break;
+            case '--blend-style':
+                // Check if next argument is a valid blend style
+                if (index + 1 < args.length && BLEND_STYLES[args[index + 1].toLowerCase()]) {
+                    blendStyle = args[index + 1].toLowerCase();
+                }
+                break;
         }
-    } else if (COLORS[arg.toLowerCase()]) {
+    } else if (COLORS[arg.toLowerCase()] && !secondColor) {
         currentColor = arg.toLowerCase();
     }
 });
