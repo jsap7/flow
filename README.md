@@ -1,19 +1,19 @@
-# Ocean Waves Terminal Screensaver
+# Flow - Terminal Pattern Animation
 
-A relaxing ocean-themed terminal screensaver featuring animated waves, swimming fish, and floating bubbles.
+A mesmerizing flowing pattern animation that creates beautiful, dynamic visuals in your terminal.
 
 ## Features
 
-- Animated waves with multiple layers
-- Swimming fish and marine creatures
-- Rising bubbles
-- Responsive to terminal size
+- Dynamic flowing patterns
 - Smooth animations
+- Responsive to terminal size
+- Multiple color options with brightness controls
+- Lightweight and efficient
 - Easy to install and run
 
 ## Installation
 
-To install the screensaver globally on your system, run:
+To install Flow globally on your system, run:
 
 ```bash
 npm install -g .
@@ -21,19 +21,80 @@ npm install -g .
 
 ## Usage
 
-Once installed, you can run the screensaver from anywhere by typing:
-
+Run the animation with default settings:
 ```bash
-ocean-waves
+flow
 ```
 
-To exit the screensaver, press `Ctrl+C`.
+### Color Options
+
+Choose from several beautiful color schemes:
+- `white` - Flowing white/gray tones
+- `matrix` - Classic Matrix green flow
+- `cyan` - Default, smooth cyan flow
+- `purple` - Flowing magenta/purple
+- `blue` - Deep blue currents
+- `red` - Flowing red patterns
+- `yellow` - Warm yellow streams
+
+Example:
+```bash
+flow matrix    # Run with Matrix green
+flow blue      # Run with blue colors
+```
+
+### Brightness Controls
+
+Adjust the pattern density and brightness:
+- `-b, --bright` - Brighter color with denser pattern
+- `-d, --dim` - Standard color with lighter pattern
+
+Example:
+```bash
+flow purple -b    # Bright purple with dense pattern
+flow yellow -d    # Dim yellow with light pattern
+```
+
+### Combined Examples
+
+```bash
+flow matrix -b    # Dense bright green Matrix-style
+flow blue -d      # Subtle flowing blue
+flow purple       # Standard purple streams
+flow yellow -b    # Bright flowing yellow
+```
+
+## Controls
+
+- `Ctrl+C` - Exit the animation
+- Terminal will automatically adjust to window resizing
 
 ## Requirements
 
 - Node.js 14.0.0 or higher
-- A terminal that supports ASCII/Unicode characters and colors
+- Terminal with color support
+- Unix-like environment (Linux, macOS, WSL)
+
+## Technical Details
+
+Flow uses ASCII characters and terminal colors to create smooth, flowing patterns. The animation is generated using mathematical sine waves combined with character density mapping to create a fluid-like effect.
+
+The pattern density varies with brightness:
+- Bright mode: Dense character pattern
+- Normal mode: Standard pattern
+- Dim mode: Light, sparse pattern
+
+## Contributing
+
+Contributions are welcome! Feel free to:
+- Report bugs
+- Suggest new features
+- Submit pull requests
 
 ## License
 
-MIT # flow
+MIT License - feel free to use and modify as you like.
+
+## Author
+
+Created with ❤️ for terminal aesthetics.

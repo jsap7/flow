@@ -1,0 +1,37 @@
+{
+  "//": "Package metadata",
+  "name": "flow",
+  "version": "1.0.0",
+  "description": "A mesmerizing flowing pattern animation for your terminal",
+  "author": "",
+  "license": "MIT",
+
+  "//": "Package configuration",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "flow": "./src/index.js"
+  },
+
+  "//": "Scripts",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+
+  "//": "Search keywords",
+  "keywords": [
+    "animation",
+    "terminal",
+    "cli",
+    "flow",
+    "pattern",
+    "screensaver",
+    "visual"
+  ],
+
+  "//": "Dependencies",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "terminal-kit": "^3.0.1"
+  }
+} 
