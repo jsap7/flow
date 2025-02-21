@@ -23,7 +23,7 @@ let width, height;
 // ============================================================================
 
 // Animation timing
-const FLOW_SPEED = 0.03;  // Speed of pattern movement
+const DEFAULT_FLOW_SPEED = 0.03;  // Default speed of pattern movement
 const FRAME_TIME = 40;    // Milliseconds between frames
 
 // Character sets for different brightness levels
@@ -79,6 +79,7 @@ const COLORS = {
 // Animation state
 let time = 0;
 let extraWaves = 0;  // Number of additional sine waves to add
+let flowSpeed = DEFAULT_FLOW_SPEED;  // Current animation speed
 
 // Current display settings
 let currentColor = 'cyan';    // Default color
@@ -187,7 +188,7 @@ function render() {
  */
 function animate() {
     render();
-    time += FLOW_SPEED;
+    time += flowSpeed;
     setTimeout(animate, FRAME_TIME);
 }
 
@@ -220,14 +221,17 @@ function showUsage() {
     console.log('    bands   - Vertical flowing bands');
     console.log('    waves   - Diagonal waves');
     console.log('    value   - Density-based blending');
-    console.log('  --waves [1-3]             Add extra wave patterns\n');
+    console.log('  --waves [1-3]             Add extra wave patterns');
+    console.log('  --speed [0.1-5]           Adjust animation speed (1 is default)\n');
     console.log('Examples:');
     console.log('  flow              # Default cyan flow');
     console.log('  flow matrix -b    # Dense bright green Matrix-style');
     console.log('  flow cyan --blend blue                  # Character-based cyan/blue blend');
     console.log('  flow purple --blend yellow --blend-style waves   # Purple/yellow waves');
     console.log('  flow red --waves 2         # Red flow with two extra wave patterns');
-    console.log('  flow blue --waves 3 -b     # Bright blue with maximum wave complexity\n');
+    console.log('  flow blue --waves 3 -b     # Bright blue with maximum wave complexity');
+    console.log('  flow cyan --speed 0.5      # Slower, relaxing flow');
+    console.log('  flow matrix --speed 2      # Fast-paced Matrix effect\n');
     console.log('Controls:');
     console.log('  Ctrl+C    Exit the animation\n');
     console.log('Starting in 2 seconds...');
@@ -259,11 +263,18 @@ args.forEach((arg, index) => {
                 }
                 break;
             case '--waves':
-                // Add 1-3 extra waves based on the next argument
                 if (index + 1 < args.length) {
                     const num = parseInt(args[index + 1]);
                     if (!isNaN(num) && num > 0 && num <= 3) {
                         extraWaves = num;
+                    }
+                }
+                break;
+            case '--speed':
+                if (index + 1 < args.length) {
+                    const speed = parseFloat(args[index + 1]);
+                    if (!isNaN(speed) && speed > 0 && speed <= 5) {
+                        flowSpeed = DEFAULT_FLOW_SPEED * speed;
                     }
                 }
                 break;

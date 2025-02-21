@@ -2,6 +2,38 @@
 
 A mesmerizing flowing pattern animation that creates beautiful, dynamic visuals in your terminal.
 
+## Examples
+
+Here are some examples of what Flow can create:
+
+### Default Flow
+Simple, smooth cyan pattern:
+```bash
+flow
+```
+![Default Flow](gifs/blue.gif)
+
+### Bright Purple Flow
+Dense pattern with bright purple:
+```bash
+flow purple -b
+```
+![Bright Purple](gifs/purple.gif)
+
+### Color Blending
+Red and blue density-based blend:
+```bash
+flow red --blend blue --blend-style value
+```
+![Color Blend](gifs/blue_red.gif)
+
+### Matrix with Extra Waves
+Complex Matrix-style pattern with maximum wave complexity:
+```bash
+flow matrix --waves 3
+```
+![Matrix Complex](gifs/matrix.gif)
+
 ## Features
 
 - Dynamic flowing patterns
@@ -11,6 +43,7 @@ A mesmerizing flowing pattern animation that creates beautiful, dynamic visuals 
 - Responsive to terminal size
 - Smooth animations
 - Customizable wave patterns
+- Adjustable animation speed
 
 ## Installation
 
@@ -91,6 +124,22 @@ flow cyan --waves 2 --blend blue    # Complex pattern with color blending
 flow matrix --waves 3 -b           # Maximum complexity with bright mode
 ```
 
+### Speed Control
+
+Adjust the animation speed to create different effects:
+```bash
+flow cyan --speed 0.5     # Slower, more relaxing flow
+flow matrix --speed 2     # Faster, more energetic pattern
+```
+
+The speed can be set from 0.1 (very slow) to 5 (very fast), with 1 being the default speed.
+
+Combine with other features:
+```bash
+flow blue --waves 2 --speed 0.7    # Complex pattern at a gentle pace
+flow matrix --speed 3 -b           # Fast-paced bright Matrix effect
+```
+
 ## Controls
 
 - `Ctrl+C` - Exit the animation
@@ -110,4 +159,8 @@ The pattern density varies with brightness:
 - Bright mode: Dense character pattern
 - Normal mode: Standard pattern
 - Dim mode: Light, sparse pattern
+
+## Acknowledgments
+
+Flow was inspired by [pipes.sh](https://github.com/pipeseroni/pipes.sh), the classic animated pipes terminal screensaver. While pipes.sh creates engaging pipe-based patterns, Flow takes a different approach with fluid, wave-based animations while maintaining the same spirit of terminal-based visual art.
 
