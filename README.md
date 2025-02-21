@@ -111,17 +111,3 @@ The pattern density varies with brightness:
 - Normal mode: Standard pattern
 - Dim mode: Light, sparse pattern
 
-## Contributing
-
-Contributions are welcome! Feel free to:
-- Report bugs
-- Suggest new features
-- Submit pull requests
-
-## License
-
-MIT License - feel free to use and modify as you like.
-
-## Author
-
-Created with ❤️ for terminal aesthetics.
